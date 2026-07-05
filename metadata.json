@@ -1,0 +1,6 @@
+{
+  "name": "Dragon Calculator",
+  "description": "A polished, minimalist dark-themed calculator with integrated Google AdMob ads.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

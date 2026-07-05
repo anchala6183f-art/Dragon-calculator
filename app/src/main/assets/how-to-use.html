@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="Y7dIC-knzZfgI1DsGXkJDdSuJCAoGHOFykxQ_RPcIdc" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>How to Use - Dragon Calculator</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7381388939290184" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: #000000;
+      --display-text-color: #ffffff;
+      --history-text-color: #777777;
+      --btn-digit-bg: #2b2b2d;
+      --btn-digit-active: #444446;
+      --btn-func-bg: #3f3f41;
+      --btn-func-active: #5a5a5c;
+      --btn-op-bg: #ff9f0a;
+      --btn-op-active: #ffb445;
+      --btn-op-active-text: #ff9f0a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--display-text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Outer Wrapper */
+    .calculator-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 16px;
+      padding: 16px 24px 0 24px;
+      background: var(--bg-color);
+      font-size: 0.75rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .top-nav::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .top-nav {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .top-nav a {
+      color: var(--history-text-color);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .top-nav a:hover, .top-nav a.active {
+      color: #ffffff;
+    }
+
+    /* Content Section (for text pages) */
+    .content-section {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      color: #cccccc;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    .content-section h1 {
+      color: #ffffff;
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    .content-section h2 {
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .content-section h3 {
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    .content-section p {
+      margin-bottom: 16px;
+    }
+    .content-section ul {
+      margin-bottom: 16px;
+      padding-left: 20px;
+    }
+    .content-section li {
+      margin-bottom: 8px;
+    }
+
+    /* Display Section */
+    .display-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      padding: 20px 24px 16px 24px;
+      word-wrap: break-word;
+      word-break: break-all;
+      overflow: hidden;
+    }
+
+    .history-display {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--history-text-color);
+      margin-bottom: 8px;
+      min-height: 2rem;
+      text-align: right;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .main-display {
+      font-size: 5rem;
+      font-weight: 100;
+      text-align: right;
+      width: 100%;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+      transition: font-size 0.15s ease-out;
+    }
+
+    /* Keypad Section */
+    .keypad-section {
+      padding: 12px 16px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    /* Buttons Style */
+    button {
+      border: none;
+      outline: none;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.1s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.1s ease;
+    }
+
+    /* Number Keys */
+    .btn-digit {
+      background-color: var(--btn-digit-bg);
+    }
+    .btn-digit:active, .btn-digit.active {
+      background-color: var(--btn-digit-active);
+      transform: scale(0.9);
+    }
+
+    /* Function Keys (AC, +/-, %) */
+    .btn-func {
+      background-color: var(--btn-func-bg);
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+    .btn-func:active, .btn-func.active {
+      background-color: var(--btn-func-active);
+      transform: scale(0.9);
+    }
+
+    /* Operator Keys (+, -, x, /, =) */
+    .btn-op {
+      background-color: var(--btn-op-bg);
+      font-size: 2.2rem;
+      font-weight: 500;
+    }
+    .btn-op:active, .btn-op.active {
+      background-color: var(--btn-op-active);
+      transform: scale(0.9);
+    }
+
+    /* Special Active Highlight State for ongoing operation (like iOS) */
+    .btn-op.selected {
+      background-color: #ffffff;
+      color: var(--btn-op-active-text);
+    }
+
+    /* Zero Button spanning 2 columns */
+    .btn-zero {
+      grid-column: span 2;
+      aspect-ratio: auto;
+      height: 100%;
+      border-radius: 9999px;
+      justify-content: flex-start;
+      padding-left: 28px;
+    }
+
+    /* Space reserved at bottom for Google AdSense Banner */
+    .banner-ad-reservation {
+      height: 64px;
+      margin-top: auto;
+      background-color: #050505;
+      border-top: 1px solid #141414;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ad-label {
+      font-size: 9px;
+      color: #444444;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-bottom: 3px;
+    }
+
+    .ad-placeholder {
+      font-size: 11px;
+      color: #666666;
+      font-weight: 500;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-container">
+  <!-- Top Navigation -->
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="how-to-use.html" class="active">How to Use</a>
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Content -->
+    <div class="content-section">
+      <h1>How to Use</h1>
+      <h2>Getting Started</h2>
+      <p>Dragon Calculator works just like the calculator you already know from your phone — no learning curve, no sign-up, and no complicated menus. Simply open the page and start calculating.</p>
+      
+      <h2>Basic Operations</h2>
+      <p>Tap the number buttons (0-9) to enter your value, then tap an operator button — plus (+), minus (−), multiply (×), or divide (÷) — followed by your second number. Tap the equals (=) button to see your result instantly displayed at the top of the screen.</p>
+      
+      <h3>Example: Basic Addition</h3>
+      <p>To calculate 25 + 47, tap 2, then 5, then the + button, then 4, then 7, then =. The display will instantly show 72.</p>
+      
+      <h3>Example: Calculating a Percentage</h3>
+      <p>To find 20% of 150, type 150, tap the % button, and the calculator will convert it to its decimal percentage value automatically. You can then multiply it with another number if needed, such as finding a discount amount or a tip on a bill.</p>
+      
+      <h2>Other Handy Buttons</h2>
+      <ul>
+        <li><strong>AC (All Clear):</strong> Resets the calculator completely, clearing any number or ongoing calculation.</li>
+        <li><strong>+/- (Toggle Sign):</strong> Switches the current number between positive and negative instantly.</li>
+        <li><strong>Decimal Point (.):</strong> Lets you work with non-whole numbers, such as 12.5 or 3.75.</li>
+      </ul>
+      
+      <h2>Tips for Best Results</h2>
+      <p>If you make a mistake mid-calculation, simply tap AC and start over — there's no need to refresh the page. The display automatically shrinks the text size for longer numbers, so you can always see your full result clearly.</p>
+    </div>
+
+
+    <!-- Empty Space Reserved for Banner Ad -->
+    <div class="banner-ad-reservation">
+      <div class="ad-label">ADVERTISEMENT</div>
+      <div class="ad-placeholder">Ad Banner Space Reserved</div>
+    </div>
+  </div>
+</body>
+</html>

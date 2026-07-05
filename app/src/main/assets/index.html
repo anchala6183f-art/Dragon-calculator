@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="Y7dIC-knzZfgI1DsGXkJDdSuJCAoGHOFykxQ_RPcIdc" />
+  <meta name="google-adsense-account" content="ca-pub-7381388939290184">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dragon Calculator</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7381388939290184" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: #000000;
+      --display-text-color: #ffffff;
+      --history-text-color: #777777;
+      --btn-digit-bg: #2b2b2d;
+      --btn-digit-active: #444446;
+      --btn-func-bg: #3f3f41;
+      --btn-func-active: #5a5a5c;
+      --btn-op-bg: #ff9f0a;
+      --btn-op-active: #ffb445;
+      --btn-op-active-text: #ff9f0a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--display-text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Outer Wrapper */
+    .calculator-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 16px;
+      padding: 16px 24px 0 24px;
+      background: var(--bg-color);
+      font-size: 0.75rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .top-nav::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .top-nav {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .top-nav a {
+      color: var(--history-text-color);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .top-nav a:hover, .top-nav a.active {
+      color: #ffffff;
+    }
+
+    /* Content Section (for text pages) */
+    .content-section {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      color: #cccccc;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    .content-section h1 {
+      color: #ffffff;
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    .content-section h2 {
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .content-section h3 {
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    .content-section p {
+      margin-bottom: 16px;
+    }
+    .content-section ul {
+      margin-bottom: 16px;
+      padding-left: 20px;
+    }
+    .content-section li {
+      margin-bottom: 8px;
+    }
+
+    /* Display Section */
+    .display-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      padding: 20px 24px 16px 24px;
+      word-wrap: break-word;
+      word-break: break-all;
+      overflow: hidden;
+    }
+
+    .history-display {
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--history-text-color);
+      margin-bottom: 8px;
+      min-height: 2rem;
+      text-align: right;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .main-display {
+      font-size: 5rem;
+      font-weight: 100;
+      text-align: right;
+      width: 100%;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+      transition: font-size 0.15s ease-out;
+    }
+
+    /* Keypad Section */
+    .keypad-section {
+      padding: 12px 16px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    /* Buttons Style */
+    button {
+      border: none;
+      outline: none;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.1s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.1s ease;
+    }
+
+    /* Number Keys */
+    .btn-digit {
+      background-color: var(--btn-digit-bg);
+    }
+    .btn-digit:active, .btn-digit.active {
+      background-color: var(--btn-digit-active);
+      transform: scale(0.9);
+    }
+
+    /* Function Keys (AC, +/-, %) */
+    .btn-func {
+      background-color: var(--btn-func-bg);
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+    .btn-func:active, .btn-func.active {
+      background-color: var(--btn-func-active);
+      transform: scale(0.9);
+    }
+
+    /* Operator Keys (+, -, x, /, =) */
+    .btn-op {
+      background-color: var(--btn-op-bg);
+      font-size: 2.2rem;
+      font-weight: 500;
+    }
+    .btn-op:active, .btn-op.active {
+      background-color: var(--btn-op-active);
+      transform: scale(0.9);
+    }
+
+    /* Special Active Highlight State for ongoing operation (like iOS) */
+    .btn-op.selected {
+      background-color: #ffffff;
+      color: var(--btn-op-active-text);
+    }
+
+    /* Zero Button spanning 2 columns */
+    .btn-zero {
+      grid-column: span 2;
+      aspect-ratio: auto;
+      height: 100%;
+      border-radius: 9999px;
+      justify-content: flex-start;
+      padding-left: 28px;
+    }
+
+    /* Space reserved at bottom for Google AdSense Banner */
+    .banner-ad-reservation {
+      height: 64px;
+      margin-top: auto;
+      background-color: #050505;
+      border-top: 1px solid #141414;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ad-label {
+      font-size: 9px;
+      color: #444444;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-bottom: 3px;
+    }
+
+    .ad-placeholder {
+      font-size: 11px;
+      color: #666666;
+      font-weight: 500;
+      opacity: 0.6;
+    }
+
+    /* Consent Popup */
+    .consent-popup {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1c1c1e;
+      padding: 20px;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+    }
+    .consent-content {
+      max-width: 600px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+    .consent-content p {
+      margin: 0;
+      color: #ffffff;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .consent-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    .btn-privacy {
+      background: transparent;
+      border: 1px solid #777777;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .btn-agree {
+      background: #ff9f0a;
+      border: none;
+      color: #ffffff;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-container">
+  <!-- Top Navigation -->
+    <nav class="top-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="how-to-use.html">How to Use</a>
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Display -->
+    <div class="display-section">
+      <div id="historyDisplay" class="history-display"></div>
+      <div id="mainDisplay" class="main-display">0</div>
+    </div>
+
+    <!-- Keypad -->
+    <div class="keypad-section">
+      <div class="grid-container">
+        <!-- Row 1 -->
+        <button id="btn-ac" class="btn-func" data-action="clear">AC</button>
+        <button id="btn-sign" class="btn-func" data-action="sign">±</button>
+        <button id="btn-percent" class="btn-func" data-action="percent">%</button>
+        <button id="btn-div" class="btn-op" data-op="÷">÷</button>
+
+        <!-- Row 2 -->
+        <button class="btn-digit" data-digit="7">7</button>
+        <button class="btn-digit" data-digit="8">8</button>
+        <button class="btn-digit" data-digit="9">9</button>
+        <button id="btn-mul" class="btn-op" data-op="×">×</button>
+
+        <!-- Row 3 -->
+        <button class="btn-digit" data-digit="4">4</button>
+        <button class="btn-digit" data-digit="5">5</button>
+        <button class="btn-digit" data-digit="6">6</button>
+        <button id="btn-sub" class="btn-op" data-op="−">−</button>
+
+        <!-- Row 4 -->
+        <button class="btn-digit" data-digit="1">1</button>
+        <button class="btn-digit" data-digit="2">2</button>
+        <button class="btn-digit" data-digit="3">3</button>
+        <button id="btn-add" class="btn-op" data-op="+">+</button>
+
+        <!-- Row 5 -->
+        <button class="btn-digit btn-zero" data-digit="0">0</button>
+        <button class="btn-digit" data-action="decimal">.</button>
+        <button id="btn-eq" class="btn-op" data-action="calculate">=</button>
+      </div>
+    </div>
+
+    <!-- Empty Space Reserved for Banner Ad -->
+    <div class="banner-ad-reservation">
+      <div class="ad-label">ADVERTISEMENT</div>
+      <div class="ad-placeholder">Ad Banner Space Reserved</div>
+    </div>
+  </div>
+
+  <script>
+    const mainDisplay = document.getElementById('mainDisplay');
+    const historyDisplay = document.getElementById('historyDisplay');
+    const opButtons = document.querySelectorAll('.btn-op');
+
+    let displayValue = '0';
+    let operand1 = null;
+    let operator = null;
+    let isTyping = false;
+    let calculationCount = 0;
+
+    // Fast click/touch support
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      // Add active state on touch
+      btn.addEventListener('touchstart', (e) => {
+        btn.classList.add('active');
+        if (window.navigator.vibrate) {
+          window.navigator.vibrate(10);
+        }
+      }, { passive: true });
+
+      btn.addEventListener('touchend', () => {
+        btn.classList.remove('active');
+      }, { passive: true });
+
+      btn.addEventListener('touchcancel', () => {
+        btn.classList.remove('active');
+      }, { passive: true });
+    });
+
+    // Handle digit clicks
+    const digitButtons = document.querySelectorAll('[data-digit]');
+    digitButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const digit = btn.getAttribute('data-digit');
+        inputDigit(digit);
+      });
+    });
+
+    // Action clicks
+    const actionButtons = document.querySelectorAll('[data-action]');
+    actionButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        handleAction(action);
+      });
+    });
+
+    // Operator clicks
+    opButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const op = btn.getAttribute('data-op');
+        inputOperator(op);
+      });
+    });
+
+    function inputDigit(digit) {
+      if (displayValue === 'Error' || !isTyping || displayValue === '0') {
+        displayValue = digit;
+      } else {
+        if (displayValue.replace('.', '').replace('-', '').length < 12) {
+          displayValue += digit;
+        }
+      }
+      isTyping = true;
+      clearOperatorSelections();
+      updateDisplay();
+    }
+
+    function handleAction(action) {
+      switch (action) {
+        case 'clear':
+          displayValue = '0';
+          operand1 = null;
+          operator = null;
+          isTyping = false;
+          historyDisplay.textContent = '';
+          clearOperatorSelections();
+          break;
+        case 'decimal':
+          if (displayValue === 'Error' || !isTyping) {
+            displayValue = '0.';
+          } else if (!displayValue.includes('.')) {
+            displayValue += '.';
+          }
+          isTyping = true;
+          break;
+        case 'sign':
+          if (displayValue === '0' || displayValue === 'Error') return;
+          displayValue = displayValue.startsWith('-') ? displayValue.slice(1) : '-' + displayValue;
+          break;
+        case 'percent':
+          if (displayValue === 'Error' || displayValue === '0') return;
+          const val = parseFloat(displayValue);
+          if (!isNaN(val)) {
+            displayValue = formatNumber(val / 100);
+            isTyping = false;
+          } else {
+            displayValue = 'Error';
+          }
+          break;
+        case 'calculate':
+          if (operand1 !== null && operator !== null) {
+            const result = calculate(operand1, displayValue, operator);
+            displayValue = result;
+            operand1 = null;
+            operator = null;
+            isTyping = false;
+            historyDisplay.textContent = '';
+            clearOperatorSelections();
+            
+            if (result !== 'Error') {
+              calculationCount++;
+            }
+          }
+          break;
+      }
+      updateDisplay();
+    }
+
+    function inputOperator(op) {
+      if (displayValue === 'Error') return;
+
+      clearOperatorSelections();
+      const currentOpBtn = Array.from(opButtons).find(btn => btn.getAttribute('data-op') === op);
+      if (currentOpBtn) {
+        currentOpBtn.classList.add('selected');
+      }
+
+      if (operand1 !== null && operator !== null && isTyping) {
+        const result = calculate(operand1, displayValue, operator);
+        displayValue = result;
+        operand1 = result;
+        operator = op;
+        historyDisplay.textContent = `${operand1} ${operator}`;
+      } else {
+        operand1 = displayValue;
+        operator = op;
+        historyDisplay.textContent = `${operand1} ${operator}`;
+      }
+      isTyping = false;
+      updateDisplay();
+    }
+
+    function calculate(op1Str, op2Str, currentOp) {
+      const op1 = parseFloat(op1Str);
+      const op2 = parseFloat(op2Str);
+      if (isNaN(op1) || isNaN(op2)) return 'Error';
+
+      let result = 0;
+      switch (currentOp) {
+        case '+': result = op1 + op2; break;
+        case '−': result = op1 - op2; break;
+        case '×': result = op1 * op2; break;
+        case '÷':
+          if (op2 === 0) return 'Error';
+          result = op1 / op2;
+          break;
+        default: return 'Error';
+      }
+
+      return formatNumber(result);
+    }
+
+    function formatNumber(val) {
+      if (isNaN(val) || !isFinite(val)) return 'Error';
+      if (Math.abs(val) > 999999999999) return 'Error';
+
+      // Keep float precision clean (up to 8 decimals)
+      let formatted = Number(val.toFixed(8)).toString();
+      if (formatted.length > 12) {
+        formatted = val.toExponential(5);
+      }
+      return formatted;
+    }
+
+    function clearOperatorSelections() {
+      opButtons.forEach(btn => btn.classList.remove('selected'));
+    }
+
+    function updateDisplay() {
+      mainDisplay.textContent = displayValue;
+
+      // Dynamic Display font scaling
+      const len = displayValue.length;
+      if (len <= 6) {
+        mainDisplay.style.fontSize = '5rem';
+      } else if (len <= 8) {
+        mainDisplay.style.fontSize = '4.2rem';
+      } else if (len <= 10) {
+        mainDisplay.style.fontSize = '3.4rem';
+      } else if (len <= 12) {
+        mainDisplay.style.fontSize = '2.8rem';
+      } else {
+        mainDisplay.style.fontSize = '2.2rem';
+      }
+    }
+
+    // Consent Popup Logic
+    const consentPopup = document.getElementById('consentPopup');
+    const btnAgree = document.getElementById('btn-agree');
+    
+    if (!localStorage.getItem('consentAgreed')) {
+      consentPopup.style.display = 'flex';
+    }
+    
+    btnAgree.addEventListener('click', () => {
+      localStorage.setItem('consentAgreed', 'true');
+      consentPopup.style.display = 'none';
+    });
+  </script>
+
+  <!-- Consent Popup -->
+  <div id="consentPopup" class="consent-popup" style="display: none;">
+    <div class="consent-content">
+      <p>By using this app, you agree to our Terms &amp; Conditions and Privacy Policy.</p>
+      <div class="consent-buttons">
+        <a href="privacy-policy.html" class="btn-privacy">Privacy Policy</a>
+        <button id="btn-agree" class="btn-agree">I Agree</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
