@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="Y7dIC-knzZfgI1DsGXkJDdSuJCAoGHOFykxQ_RPcIdc" />
+  <meta name="google-adsense-account" content="ca-pub-7381388939290184">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Contact - Dragon Calculator</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7381388939290184" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: #000000;
+      --display-text-color: #ffffff;
+      --history-text-color: #777777;
+      --btn-digit-bg: #2b2b2d;
+      --btn-digit-active: #444446;
+      --btn-func-bg: #3f3f41;
+      --btn-func-active: #5a5a5c;
+      --btn-op-bg: #ff9f0a;
+      --btn-op-active: #ffb445;
+      --btn-op-active-text: #ff9f0a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--display-text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Outer Wrapper */
+    .calculator-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 16px;
+      padding: 16px 24px 0 24px;
+      background: var(--bg-color);
+      font-size: 0.75rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .top-nav::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .top-nav {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .top-nav a {
+      color: var(--history-text-color);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .top-nav a:hover, .top-nav a.active {
+      color: #ffffff;
+    }
+
+    /* Content Section (for text pages) */
+    .content-section {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      color: #cccccc;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .content-section h1 {
+      color: #ffffff;
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .content-section p {
+      margin-bottom: 16px;
+    }
+
+    .contact-email {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #ffffff;
+      margin-top: 24px;
+      display: inline-block;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      padding-bottom: 4px;
+    }
+
+    /* Space reserved at bottom for Google AdSense Banner */
+    .banner-ad-reservation {
+      height: 64px;
+      margin-top: auto;
+      background-color: #050505;
+      border-top: 1px solid #141414;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ad-label {
+      font-size: 9px;
+      color: #444444;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-bottom: 3px;
+    }
+
+    .ad-placeholder {
+      font-size: 11px;
+      color: #666666;
+      font-weight: 500;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-container">
+  <!-- Top Navigation -->
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="how-to-use.html">How to Use</a>
+      <a href="about.html">About</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+
+    <!-- Content -->
+    <div class="content-section">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you! Whether you have feedback, feature requests, or just want to say hi, feel free to reach out. We're always working to make Dragon Calculator better.</p>
+      
+      <p>You can contact us via email at:</p>
+      <a href="mailto:contact@dragoncalculator.com" class="contact-email">contact@dragoncalculator.com</a>
+    </div>
+
+    <!-- Google AdSense Banner Ad -->
+    <div class="banner-ad-reservation">
+      <ins class="adsbygoogle"
+           style="display:block" data-ad-client="ca-pub-7381388939290184" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+</body>
+</html>

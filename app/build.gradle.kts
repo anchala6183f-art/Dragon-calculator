@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example"
+    namespace = "com.aistudio.calculator.kxmpzq"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example"
-        minSdk = 26
+        applicationId = "com.aistudio.calculator.kxmpzq"
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -28,21 +28,19 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
+    
+    applicationVariants.all {
+        val variant = this
+        val copyTask = tasks.register("copyAssetsFor${variant.name.capitalize()}", Copy::class.java) {
+            from(project.rootDir)
+            include("*.html")
+            into("${project.projectDir}/src/main/assets")
+        }
+        variant.mergeAssetsProvider.get().dependsOn(copyTask)
     }
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.0")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 }
